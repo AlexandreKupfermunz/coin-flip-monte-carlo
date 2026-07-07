@@ -1,32 +1,41 @@
 import numpy as np
 rng = np.random.default_rng()
 
-# 0 = tails, 1 = head
-def flip_a_coin():
-   
-    a = rng.integers(2)
+import matplotlib.pyplot as plt
 
-    return a
+#generate a matrix full of 0 and 1 then convert the 0s to -1
+def simulation(number_of_tosses, number_of_iteration):
+    """
+    Simulate multiple random coin flips.
 
-def simulation(number_of_tosses):
+    Logic
+    ----------
+    Creates a maxtrix of shape (number_of_iteration, number_of_tosses) 
+    full of 1s and 0s then convert the 0s into -1
+    """
 
-    toss_count = 0
-    head_count = 0
+    matrix = rng.integers(2, size = (number_of_iteration, number_of_tosses)) * 2 - 1
 
-    results = np.empty(number_of_tosses, dtype=int)
-    average_evolution = np.empty(number_of_tosses)
+    cumsum = np.cumsum(matrix, axis = 1)
 
-    for i in range(number_of_tosses):
-        
-        toss_count +=1
+    return cumsum
 
-        result = flip_a_coin()
-        results[i] = result
+def plot(number_of_tosses, number_of_iteration):
 
-        if result == 1:
-            head_count += 1
+    cumsum = simulation(number_of_tosses, number_of_iteration)
 
-        average_evolution[i] = head_count / toss_count
+    x = np.arange(number_of_tosses)
 
-    return results, average_evolution
+    for i in range(number_of_iteration):
 
+        y = cumsum[i,:]
+        plt.plot(x, y, label = f"iteration #{i+1}")
+
+    plt.xlabel("number of tosses")
+    plt.ylabel("position")
+    plt.title("Evolution of Coin Tosses")
+    plt.savefig("monte-carlo-coin-flip.png")
+    plt.show()
+
+if __name__ == "__main__":
+    plot(100, 30)
