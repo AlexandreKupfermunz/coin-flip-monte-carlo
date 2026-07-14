@@ -18,13 +18,17 @@ def simulation(number_of_tosses, number_of_iteration):
 
     cumsum = np.cumsum(matrix, axis = 1)
 
+    base_value = np.zeros(shape=(number_of_iteration,1))
+
+    cumsum = np.concatenate((base_value, cumsum), axis = 1)
+
     return cumsum
 
 def plot(number_of_tosses, number_of_iteration):
 
     cumsum = simulation(number_of_tosses, number_of_iteration)
 
-    x = np.arange(number_of_tosses)
+    x = np.arange(number_of_tosses+1)
 
     for i in range(number_of_iteration):
 
